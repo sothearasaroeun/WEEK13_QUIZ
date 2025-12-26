@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:w12_quiz/WEEK13_Quiz/ui/groceries/tabs/gorceries_list.dart';
 import '../../data/mock_grocery_repository.dart';
 import '../../models/grocery.dart';
 import 'grocery_form.dart';
@@ -10,7 +11,11 @@ class GroceryList extends StatefulWidget {
   State<GroceryList> createState() => _GroceryListState();
 }
 
+enum ListTab { gorceriesTab, searchTab }
+
 class _GroceryListState extends State<GroceryList> {
+    ListTab _currentTab = ListTab.gorceriesTab;
+
 
   void onCreate() async {
     // Navigate to the form screen using the Navigator push
@@ -44,6 +49,21 @@ class _GroceryListState extends State<GroceryList> {
         actions: [IconButton(onPressed: onCreate, icon: const Icon(Icons.add))],
       ),
       body: content,
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.blue,
+        currentIndex: _currentTab.index,
+        onTap: (index) {
+          setState(() {
+            _currentTab = ListTab.values[index];
+          });
+        },
+        items: const [
+          
+          BottomNavigationBarItem(icon: Icon(Icons.local_grocery_store), label: 'Gorceries'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+         
+        ],
+      ),
     );
   }
 }
@@ -59,6 +79,13 @@ class GroceryTile extends StatelessWidget {
       leading: Container(width: 15, height: 15, color: grocery.category.color),
       title: Text(grocery.name),
       trailing: Text(grocery.quantity.toString()),
+      onTap: () {
+        Navigator.push(
+          context,
+            MaterialPageRoute(
+              builder: (context) => GorceriesList()),
+              );
+            },
     );
   }
 }
